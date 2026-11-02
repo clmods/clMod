@@ -1,14 +1,33 @@
 name: build
-on: [workflow_dispatch, push]
+
+on:
+  workflow_dispatch:
+  push:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # ШАГ РАСПАКОВКИ (Без него сервер не видит файлы внутри архива!)
+      - name: Unzip project files
+        run: |
+          unzip *.zip -d .
+          rm -f *.zip
+
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: 17 }
+        with: 
+          distribution: temurin
+          java-version: 16 # Сменил на 16 для стабильности Minecraft 1.16.5
+
       - uses: gradle/actions/setup-gradle@v3
-        with: { gradle-version: 7.3.3 }
-      - run: gradle build
+        with: 
+          gradle-version: 7.3.3
+
+      - run: gradle build --no-daemon
+
       - uses: actions/upload-artifact@v4
-        with: { name: narcotics-jar, path: build/libs/*.jar }
+        with: 
+          name: narcotics-jar
+          path: build/libs/*.jar
