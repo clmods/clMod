@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ШАГ РАСПАКОВКИ (Без него сервер не видит файлы внутри архива!)
       - name: Unzip project files
         run: |
           unzip *.zip -d .
@@ -19,7 +18,7 @@ jobs:
       - uses: actions/setup-java@v4
         with: 
           distribution: temurin
-          java-version: 16 # Сменил на 16 для стабильности Minecraft 1.16.5
+          java-version: 17 # Переключено на Java 17
 
       - uses: gradle/actions/setup-gradle@v3
         with: 
